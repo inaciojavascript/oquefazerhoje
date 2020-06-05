@@ -117,16 +117,3 @@ function functexto(){
 	}
 	Texto.focus();
 }
-
-/*Resetar informações*/
-Clear.addEventListener('click',function(){
-	if (todosArray!=[]) {
-		for (var i = 0; todosArray.length; i++) {
-			/*NotFoundError: Node was not found*/
-			Lista.removeChild(this.parentNode);
-		}
-		todosArray=[];
-	}
-	
-	
-});
