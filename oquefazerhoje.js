@@ -2,6 +2,10 @@
 var Lista=document.getElementById('lista');
 var Enviar=document.getElementById('enviar');
 var Texto=document.getElementById('texto');
+const Clear = document.getElementById('resete');
+var todosArray= new Array;
+
+
 
 /*classe para criar e remover item*/
 class Item{
@@ -33,8 +37,27 @@ class Item{
 		ItemLixeira.addEventListener('click', () => this.remove(ItemLi));
 
 		ItemCirculo.addEventListener('click', () => this.check(ItemCirculo));
+	
+		Clear.addEventListener('click',() => this.resete());
 	}
 	remove(b){
+		/*remove item*/
+	
+		/*Upper case para padronizar busca*/
+		var cont=todosArray.length;
+		for (var i = 0; i < cont; i++) {
+			todosArray[i]=todosArray[i].toUpperCase();
+		}
+		/*busca texto do elemento e remove no array*/
+		var vai=b.innerText;
+		console.log(vai);
+		var index = todosArray.indexOf(vai);
+		if(index>-1){
+			todosArray.splice(index,1);
+		}
+		/*Reenvia array para local storage*/
+		window.localStorage.setItem("todosLocal", JSON.stringify(todosArray));
+		/*remove node filho*/
 		Lista.removeChild(b);
 	}
 	check(ItemCirculo){
@@ -49,7 +72,34 @@ class Item{
 		}
 		
 	}
+	resete(){
+		/*zera array*/
+		var cont=todosArray.length;
+		for (var i = 0; i < cont; i++) {
+			todosArray.pop();
+		}
+		/*remove local storage*/
+		localStorage.removeItem("todosLocal");
+		/*remove nodesChilds*/
+		var child=Lista.lastElementChild;
+		while (child){
+			Lista.removeChild(child);
+			child=Lista.lastElementChild;
+		}
+	}
 }
+
+/*Local storage*/
+
+if(localStorage.todosLocal){
+	todosArray = JSON.parse(window.localStorage.getItem("todosLocal"));
+	for (var i = 0; i < todosArray.length; i++) {
+		new Item(todosArray[i]);
+	}
+}else{
+    window.localStorage.setItem("todosLocal", JSON.stringify(todosArray));
+}
+
 /*Entrada de texto e chamada da classe*/
 Enviar.addEventListener('click',functexto);
 window.addEventListener('keydown', (e) => {
@@ -59,11 +109,24 @@ window.addEventListener('keydown', (e) => {
 });
 
 function functexto(){
-	
 	if(Texto.value != ""){
 		new Item(Texto.value);
+		todosArray.push(Texto.value);
+		window.localStorage.setItem("todosLocal", JSON.stringify(todosArray));
 		Texto.value='';
 	}
 	Texto.focus();
 }
 
+/*Resetar informações*/
+Clear.addEventListener('click',function(){
+	if (todosArray!=[]) {
+		for (var i = 0; todosArray.length; i++) {
+			/*NotFoundError: Node was not found*/
+			Lista.removeChild(this.parentNode);
+		}
+		todosArray=[];
+	}
+	
+	
+});
