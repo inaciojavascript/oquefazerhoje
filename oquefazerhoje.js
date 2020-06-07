@@ -1,8 +1,9 @@
 /*Declaração de variáveis globais*/
-var Lista=document.getElementById('lista');
-var Enviar=document.getElementById('enviar');
-var Texto=document.getElementById('texto');
+const Lista=document.getElementById('lista');
+const Enviar=document.getElementById('enviar');
+const Texto=document.getElementById('texto');
 const Clear = document.getElementById('resete');
+const Data=document.getElementById('data');
 var todosArray= new Array;
 
 
@@ -117,3 +118,8 @@ function functexto(){
 	}
 	Texto.focus();
 }
+/*Data*/
+const formato = {weekday : "long", month:"long", day:"numeric"};
+const Hoje = new Date();
+
+Data.innerHTML = Hoje.toLocaleDateString("pt-BR", formato);
